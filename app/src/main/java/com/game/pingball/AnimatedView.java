@@ -58,7 +58,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     protected void onDraw(Canvas c) {
         if (xBall < 0 && yBall < 0) {           //on démarre au centre, initialisation de la taille d'écran, initialisation position plateforme
             xBall = this.getWidth() / 2;
-            yBall = this.getHeight() / 2;
+            yBall = 0;
             xPlatform = this.getWidth()/2-widthPlatform/2;
             yPlatform = this.getHeight()*0.75f;
             widthScreen = this.getWidth();
