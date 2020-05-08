@@ -1,4 +1,4 @@
-package com.game.pingball;
+package com.game.pingball.home;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.game.pingball.R;
 
 import java.util.Objects;
 

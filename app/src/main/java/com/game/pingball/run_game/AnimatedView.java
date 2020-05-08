@@ -1,4 +1,4 @@
-package com.game.pingball;
+package com.game.pingball.run_game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,13 +7,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 
+import com.game.pingball.R;
+
 import java.util.Calendar;
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private Context mContext;
     protected int xBall = -1;
     protected int yBall = -1;
-    protected float xPlatform = -1;
+    private float xPlatform = -1;
     protected float yPlatform = -1;
     protected int xVelocity = 30;
     protected int yVelocity = 30;
@@ -94,5 +96,13 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             return true;
         }
         else return false;
+    }
+
+    public void setxPlatform(float xPlatform) {
+        this.xPlatform = xPlatform;
+    }
+
+    public float getWidthPlatform(){
+        return this.widthPlatform;
     }
 }

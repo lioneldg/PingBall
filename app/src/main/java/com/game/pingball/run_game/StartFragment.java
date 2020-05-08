@@ -1,4 +1,4 @@
-package com.game.pingball;
+package com.game.pingball.run_game;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.game.pingball.R;
 
 
 public class StartFragment extends Fragment {
@@ -33,7 +35,7 @@ public class StartFragment extends Fragment {
             public boolean onTouch(final View v, final MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) { return true; }
                 else if(event.getAction() == MotionEvent.ACTION_MOVE){
-                    animatedView.xPlatform = event.getX()-animatedView.widthPlatform/2.0f;
+                    animatedView.setxPlatform(event.getX()-animatedView.getWidthPlatform()/2.0f);
                     return true;
                 }
                 return false;

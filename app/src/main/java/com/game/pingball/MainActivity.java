@@ -6,8 +6,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+
+import com.game.pingball.home.HomeFragment;
+import com.game.pingball.run_game.StartFragment;
 
 
 public class MainActivity extends AppCompatActivity {
