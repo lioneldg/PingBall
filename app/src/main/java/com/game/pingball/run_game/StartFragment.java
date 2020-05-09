@@ -33,12 +33,11 @@ public class StartFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         animatedView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(final View v, final MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) { return true; }
-                else if(event.getAction() == MotionEvent.ACTION_MOVE){
-                    animatedView.setxPlatform(event.getX()-animatedView.getWidthPlatform()/2.0f);
-                    return true;
+                if(event.getAction() == MotionEvent.ACTION_MOVE) {
+                    animatedView.setXPlatform(event.getX() - animatedView.getWidthPlatform() / 2.0f);
+                    animatedView.setYPlatform(event.getY() - animatedView.getHeightScreen()/6.0f);
                 }
-                return false;
+                return true;
             }
         });
     }

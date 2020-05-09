@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.game.pingball.R;
+import com.game.pingball.run_game.StartFragment;
 
 import java.util.Objects;
 
@@ -23,6 +24,7 @@ public class HomeFragment extends Fragment {
     private Button buttonStart;
     private FragmentManager fm;
     private FragmentTransaction ft;
+    private StartFragment startFragment;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,9 @@ public class HomeFragment extends Fragment {
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onClick(View v) {
+                startFragment = new StartFragment();
                 ft = fm.beginTransaction();
-                ft.show(Objects.requireNonNull(fm.findFragmentByTag("tagStartFragment")));
+                ft.add(R.id.main_layout, startFragment, "tagStartFragment");
                 ft.hide(Objects.requireNonNull(fm.findFragmentByTag("tagHomeFragment")));
                 ft.addToBackStack("start");
                 ft.commit();

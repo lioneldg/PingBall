@@ -18,15 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        StartFragment startFragment = new StartFragment();
         HomeFragment homeFragment = new HomeFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.main_layout, startFragment, "tagStartFragment");
         ft.add(R.id.main_layout, homeFragment, "tagHomeFragment");
-        ft.hide(startFragment);
         ft.commit();
-
-
     }
 }
