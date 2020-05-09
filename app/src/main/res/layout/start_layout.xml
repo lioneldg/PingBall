@@ -6,7 +6,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#000000">
+    android:background="@color/black"
+    tools:ignore="Overdraw">
 
     <com.game.pingball.run_game.AnimatedView
         android:id="@+id/anim_view"

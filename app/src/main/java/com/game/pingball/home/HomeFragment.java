@@ -31,7 +31,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_layout, container,false);
         buttonStart = view.findViewById(R.id.buttonStart);
         return view;

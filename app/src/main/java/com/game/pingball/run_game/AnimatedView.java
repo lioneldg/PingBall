@@ -12,46 +12,41 @@ import com.game.pingball.R;
 import java.util.Calendar;
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
-    private Context mContext;
-    protected int xBall = -1;
-    protected int yBall = -1;
+    private int xBall = -1;
+    private int yBall = -1;
     private float xPlatform = -1;
-    protected float yPlatform = -1;
-    protected int xVelocity = 30;
-    protected int yVelocity = 30;
-    private Handler h;
+    private float yPlatform = -1;
+    private int xVelocity = 30;
+    private int yVelocity = 30;
+    private final Handler h;
     private final int FRAME_RATE = 30;
-    private BitmapDrawable ball;
-    private Bitmap ballBitmap;
-    private BitmapDrawable platform;
-    private Bitmap platformBitmap;
+    private final Bitmap ballBitmap;
+    private final Bitmap platformBitmap;
     private int widthScreen;
     private int heightScreen;
-    protected int widthBall;
-    protected int heightBall;
-    protected int widthPlatform;
-    protected int heightPlatform;
-    long oldTimeMillis = 0, newTimeMillis = 0;
-
+    private final int widthBall;
+    private final int heightBall;
+    private final int widthPlatform;
+    private final int heightPlatform;
+    private long oldTimeMillis = 0;
 
 
     public AnimatedView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
         h = new Handler();
-        ball = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.ball);
+        BitmapDrawable ball = (BitmapDrawable) context.getResources().getDrawable(R.drawable.ball);
         ballBitmap = ball.getBitmap();
         widthBall = ball.getBitmap().getWidth();
         heightBall =  ball.getBitmap().getHeight();
 
-        platform = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.platform);
+        BitmapDrawable platform = (BitmapDrawable) context.getResources().getDrawable(R.drawable.platform);
         platformBitmap = platform.getBitmap();
         widthPlatform = platform.getBitmap().getWidth();
         heightPlatform = platform.getBitmap().getHeight();
 
     }
 
-    private Runnable r = new Runnable() {
+    private final Runnable r = new Runnable() {
         public void run() {
             invalidate();
         }
@@ -61,7 +56,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         if (xBall < 0 && yBall < 0) {           //on démarre au centre, initialisation de la taille d'écran, initialisation position plateforme
             xBall = this.getWidth() / 2;
             yBall = 0;
-            xPlatform = this.getWidth()/2-widthPlatform/2;
+            xPlatform = (float)this.getWidth()/2-(float)widthPlatform/2;
             yPlatform = this.getHeight()*0.75f;
             widthScreen = this.getWidth();
             heightScreen = this.getHeight();
@@ -90,7 +85,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private boolean testTouchDelay(){   //laisser le temps à la balle de sortir de la platforme
-        newTimeMillis = Calendar.getInstance().getTimeInMillis();
+        long newTimeMillis = Calendar.getInstance().getTimeInMillis();
         if(newTimeMillis - oldTimeMillis > (FRAME_RATE/xVelocity)*35) {
             oldTimeMillis = newTimeMillis;
             return true;
