@@ -9,11 +9,9 @@ import android.util.AttributeSet;
 import android.widget.Toast;
 import com.game.pingball.R;
 
-import java.util.Calendar;
-
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
-    private int xBall = -1;
-    private int yBall = -1;
+    private int xBall = -101;
+    private int yBall = -101;
     private float xPlatform = -1;
     private float yPlatform = -1;
     private float xVelocity = 20;
@@ -30,11 +28,11 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private final int heightBall;
     private final int widthPlatform;
     private final int heightPlatform;
-    private long oldTimeMillis = 0;
     private boolean loose = false;
     private boolean blockedSide = false;
     private boolean blockedTop = false;
-!!!!!!!!!!!!!!utiliser blocked pour faire sortir la balle de la platforme!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private boolean blockedX = false;
+    private boolean blockedY = false;
 
     public AnimatedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -58,7 +56,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     };
 
     protected void onDraw(Canvas c) {
-        if (xBall < 0 && yBall < 0) {           //on démarre au centre, initialisation de la taille d'écran, initialisation position plateforme
+        if (xBall < -100 && yBall < -100) {           //on démarre au centre, initialisation de la taille d'écran, initialisation position plateforme
             xBall = this.getWidth() / 2;
             yBall = 0;
             xPlatform = (float) this.getWidth() / 2 - (float) widthPlatform / 2;
@@ -73,18 +71,9 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             xBall += xVelocity;
             yBall += yVelocity;
             platformTouched();
+            wallTouched();
             deceleration(20.0f);
-            if ((xBall < widthScreen - widthBall) && (xBall > 0)) blockedSide = false;
-            if (yBall > 0) blockedTop = false;
-            if (((xBall > widthScreen - widthBall) || (xBall < 0)) && !blockedSide) {
-                xVelocity *= -0.9f;    //la balle rebondit sur les murs
-                blockedSide = true;
 
-            }
-            if (yBall < 0 && !blockedTop){
-                yVelocity *= -0.9f; //la balle rebondit au plafond
-                blockedTop = true;
-            }
         }
         c.drawBitmap(ballBitmap, xBall, yBall, null);
         c.drawBitmap(platformBitmap, xPlatform, yPlatform, null);
@@ -93,28 +82,36 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void platformTouched() {
+        if (!(((yBall + heightBall > yPlatform) && (yBall < yPlatform + heightPlatform)) && ((xBall + widthBall / 2.0f > xPlatform) && (xBall + widthBall / 2.0f < xPlatform + widthPlatform))))
+            blockedY = false;
+        if (!(((yBall + heightBall / 2.0f > yPlatform) && (yBall + heightBall / 2.0f < yPlatform + heightPlatform)) && ((xBall + widthBall > xPlatform) && (xBall < xPlatform + widthPlatform))))
+            blockedX = false;
         if (((yBall + heightBall > yPlatform) && (yBall < yPlatform + heightPlatform)) && ((xBall + widthBall / 2.0f > xPlatform) && (xBall + widthBall / 2.0f < xPlatform + widthPlatform))) {
-            if (testTouchDelay()) {
-                yVelocity *= -1;
-                xVelocity *= -1;
-                acceleration(150);
+            if (!blockedX && !blockedY) {
+                yVelocity *= - 1;   //la vitesse de la platforme est proportionnellement appliquée à la balle
+                acceleration(5);
+                blockedY = true;
             }
         }
         if (((yBall + heightBall / 2.0f > yPlatform) && (yBall + heightBall / 2.0f < yPlatform + heightPlatform)) && ((xBall + widthBall > xPlatform) && (xBall < xPlatform + widthPlatform))) {
-            if (testTouchDelay()) {
+            if (!blockedX && !blockedY) {
                 xVelocity *= -1;
-                acceleration(150);
+                blockedX = true;
             }
         }
-
     }
 
-    private boolean testTouchDelay() {   //laisser le temps à la balle de sortir de la platforme
-        long newTimeMillis = Calendar.getInstance().getTimeInMillis();
-        if (newTimeMillis - oldTimeMillis > (FRAME_RATE / xVelocity) * 35) {
-            oldTimeMillis = newTimeMillis;
-            return true;
-        } else return false;
+    private void wallTouched() {
+        if ((xBall < widthScreen - widthBall) && (xBall > 0)) blockedSide = false;
+        if (yBall > 0) blockedTop = false;
+        if (((xBall > widthScreen - widthBall) || (xBall < 0)) && !blockedSide) {
+            xVelocity *= -1;    //la balle rebondit sur les murs
+            blockedSide = true;
+        }
+        if (yBall < 0 && !blockedTop) {
+            yVelocity *= -0.9f; //la balle rebondit au plafond et ralenti un peu sur Y
+            blockedTop = true;
+        }
     }
 
     public void setXPlatform(float xPlatform) {
@@ -130,17 +127,14 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void acceleration(float acc) {
-        if (xVelocity > -maxVelocity && xVelocity < maxVelocity) {
-            xVelocity += (xVelocity > 0) ? acc : -acc;
+        if (yVelocity > -maxVelocity && yVelocity < maxVelocity) {
             yVelocity += (yVelocity > 0) ? acc : -acc;
         }
     }
 
-    private void deceleration(float des){
-        if(xVelocity > 0 && xVelocity > normalVelocity) xVelocity -= des;
-        if(xVelocity < 0 && xVelocity < -normalVelocity) xVelocity += des;
-        if(yVelocity > 0 && yVelocity > normalVelocity) yVelocity -= des;
-        if(yVelocity < 0 && yVelocity < -normalVelocity) yVelocity += des;
+    private void deceleration(float des) {
+        if (yVelocity > 0 && yVelocity > normalVelocity) yVelocity -= des;
+        if (yVelocity < 0 && yVelocity < -normalVelocity) yVelocity += des;
     }
 
     public int getHeightScreen() {
