@@ -1,4 +1,4 @@
-package com.game.pingball;
+package com.game.ping_in_space;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.game.pingball.run_game;
+package com.game.ping_in_space.run_game;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.game.pingball.R;
+import com.game.ping_in_space.R;
 
 
-public class StartFragment extends Fragment {
+public class RunGameFragment extends Fragment {
 
     private AnimatedView animatedView;
     private ProgressBar progressBar = null;
@@ -26,11 +26,12 @@ public class StartFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.start_layout, container,false);
+        View view = inflater.inflate(R.layout.run_game_layout, container,false);
         animatedView = view.findViewById(R.id.anim_view);
         return view;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         progressBar = view.findViewById(R.id.progressBar);

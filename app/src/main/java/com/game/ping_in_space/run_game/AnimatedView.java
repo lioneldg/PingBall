@@ -1,4 +1,4 @@
-package com.game.pingball.run_game;
+package com.game.ping_in_space.run_game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,7 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.Toast;
-import com.game.pingball.R;
+import com.game.ping_in_space.R;
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private int xBall = -101;
@@ -22,8 +22,8 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private final int FRAME_RATE = 30;
     private final Bitmap ballBitmap;
     private final Bitmap platformBitmap;
-    private int widthScreen;
-    private int heightScreen;
+    private int widthScreen = 0;
+    private int heightScreen = 0;
     private final int widthBall;
     private final int heightBall;
     private final int widthPlatform;
@@ -39,12 +39,12 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         super(context, attrs);
         h = new Handler();
 
-        BitmapDrawable ball = (BitmapDrawable) context.getResources().getDrawable(R.drawable.ball);
+        BitmapDrawable ball = (BitmapDrawable) context.getResources().getDrawable(R.drawable.earth45);
         ballBitmap = ball.getBitmap();
         widthBall = ball.getBitmap().getWidth();
         heightBall = ball.getBitmap().getHeight();
 
-        BitmapDrawable platform = (BitmapDrawable) context.getResources().getDrawable(R.drawable.platform);
+        BitmapDrawable platform = (BitmapDrawable) context.getResources().getDrawable(R.drawable.ufo200px);
         platformBitmap = platform.getBitmap();
         widthPlatform = platform.getBitmap().getWidth();
         heightPlatform = platform.getBitmap().getHeight();
@@ -117,7 +117,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             if(reboundsRest > 0) reboundsRest -= 10;
             if(reboundsRest<=0){
                 endGame = true;
-                yBall -= 100;   //faire disparaitre la ball lors de la victoire
+                yBall -= 100;   //faire disparaitre la balle lors de la victoire
                 Toast.makeText(getContext(), "You WIN !!!", Toast.LENGTH_LONG).show();
             }
         }

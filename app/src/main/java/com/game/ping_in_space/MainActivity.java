@@ -1,14 +1,10 @@
-package com.game.pingball;
+package com.game.ping_in_space;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-
+import com.game.ping_in_space.home.HomeFragment;
 import android.os.Bundle;
-
-import com.game.pingball.home.HomeFragment;
-import com.game.pingball.run_game.StartFragment;
 
 
 public class MainActivity extends AppCompatActivity {
