@@ -24,9 +24,6 @@ import com.game.ping_in_space.run_game.RunGameFragment;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerViewClickListener{
-    //résoudre le bug de double sélection 1<=>8  2<=>9  3<=>10 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //le niveau 1 doit être sélectionné au départ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //envoyer le jeu au niveau sélectionné!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private Button buttonStart = null;
     private FragmentManager fm = null;
     private FragmentTransaction ft = null;
@@ -34,6 +31,7 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
     private RecyclerView recyclerViewLevel = null;
     private LevelsAdapter levelsAdapter = null;
     TextView textView = null;
+    int level = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onCreate(Bundle savedInstanceState) {
@@ -51,12 +49,12 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
         return view;
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onClick(View v) {
-                runGameFragment = new RunGameFragment();
+                runGameFragment = new RunGameFragment(level);
                 ft = fm.beginTransaction();
                 ft.add(R.id.main_layout, runGameFragment, "tagRunGameFragment");
                 ft.hide(Objects.requireNonNull(fm.findFragmentByTag("tagHomeFragment")));
@@ -68,17 +66,12 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void recyclerViewListClicked(View v, int position) {
-        Log.d("LEVEL",""+position);
-
-        if(textView == null) {
-            textView = v.findViewById(R.id.textViewCell);
-            textView.setTextColor(getResources().getColor(R.color.white));
-        }
-        else{
-            textView.setTextColor(getResources().getColor(R.color.yellow));
-            textView = v.findViewById(R.id.textViewCell);
-            textView.setTextColor(getResources().getColor(R.color.white));
-        }
+    public void recyclerViewListClicked(View oldView, View v, int position) {
+        level = position+1;
+        textView = oldView.findViewById(R.id.textViewCell);
+        textView.setTextColor(getResources().getColor(R.color.yellow));
+        textView = v.findViewById(R.id.textViewCell);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        Log.d("LEVEL",""+level);
     }
 }

@@ -1,6 +1,5 @@
 package com.game.ping_in_space.home;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +14,15 @@ import com.game.ping_in_space.R;
 
 public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.LevelViewHolder> {
 
-    private int levels = 10;
+    private int levels = 7;
     private Context context;
     private static RecyclerViewClickListener itemListener;
+    private static boolean levelChoosed = false;
+    private static View oldView = null;
 
     public LevelsAdapter(Context context, RecyclerViewClickListener itemListener) {
         this.context = context;
-        this.itemListener = itemListener;
+        LevelsAdapter.itemListener = itemListener;
     }
 
     @NonNull
@@ -33,7 +34,7 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.LevelViewH
 
     public void onBindViewHolder(@NonNull LevelViewHolder holder, int position) {
         String level = "Level "+(position+1);
-        holder.display(level);
+        holder.display(context, level);
     }
 
     public int getItemCount() {
@@ -43,21 +44,28 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.LevelViewH
     public static class LevelViewHolder extends RecyclerView.ViewHolder{
         private TextView textViewCell = null;
 
+
         public LevelViewHolder(@NonNull final View itemView) {
             super(itemView);
             textViewCell = itemView.findViewById(R.id.textViewCell);
             itemView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    itemListener.recyclerViewListClicked(v, getAdapterPosition());
+                    levelChoosed =true;
+                    itemListener.recyclerViewListClicked(oldView, v, getAdapterPosition());
+                    oldView = v;
                 }
             });
         }
 
-        public void display(String cellLevel) {
+        public void display(Context context, String cellLevel) {
             textViewCell.setText(cellLevel);
+            if(getAdapterPosition() == 0 && levelChoosed == false){
+                oldView = textViewCell;                     //au lancement oldView est LEVEL1
+                textViewCell.setTextColor(context.getResources().getColor(R.color.white));
+            }
         }
     }
     public interface RecyclerViewClickListener {
-        public void recyclerViewListClicked(View v, int position);
+        public void recyclerViewListClicked(View oldView, View v, int position);
     }
 }

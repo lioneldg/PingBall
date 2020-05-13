@@ -1,5 +1,6 @@
 package com.game.ping_in_space.run_game;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,6 +8,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
+
 import com.game.ping_in_space.R;
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
@@ -34,6 +38,10 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private boolean blockedX = false;
     private boolean blockedY = false;
     private int reboundsRest = 100;
+    private int decrReboundRest = 10;
+    private int level = 1;
+    private FragmentActivity parentActivity = null;
+    private boolean pause = true;
 
     public AnimatedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -56,9 +64,19 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             invalidate();
         }
     };
+    private final Runnable p = new Runnable() {
+        public void run() {
+            pause = false;
+            invalidate();
+        }
+    };
+
+
 
     protected void onDraw(Canvas c) {
+
         if (xBall < -100 && yBall < -100) {           //on démarre au centre, initialisation de la taille d'écran, initialisation position plateforme
+            if(pause) startCounter();
             xBall = this.getWidth() / 2;
             yBall = 10;
             xPlatform = (float) this.getWidth() / 2 - (float) widthPlatform / 2;
@@ -69,17 +87,18 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         } else if (yBall > heightScreen) {      //si la balle sort en bas de l'écran you loose!!!
             Toast.makeText(getContext(), "You LOOSE !!!", Toast.LENGTH_LONG).show();
             endGame = true;   //va permettre de sortir de la boucle de onDraw <=> h.postDelayed
+            parentActivity.setTitle(getContext().getString(R.string.app_name)); //titre nom de l'application en cas de perte
         } else {
             xBall += xVelocity;
             yBall += yVelocity;
             platformTouched();
             wallTouched();
-            deceleration(18.0f);
+            deceleration(20.0f);
 
         }
         c.drawBitmap(ballBitmap, xBall, yBall, null);
         c.drawBitmap(platformBitmap, xPlatform, yPlatform, null);
-        if (!endGame)
+        if (!endGame && !pause)
             h.postDelayed(r, FRAME_RATE);   //h.postDelayed invalide avec le Runnable ce qui rappelle onDraw
     }
 
@@ -114,11 +133,18 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         if (yBall < 0 && !blockedTop) {
             yVelocity *= -0.9f; //la balle rebondit au plafond et ralenti un peu sur Y
             blockedTop = true;
-            if(reboundsRest > 0) reboundsRest -= 10;
+            if(reboundsRest > 0) reboundsRest -= decrReboundRest;
             if(reboundsRest<=0){
-                endGame = true;
+                //endGame = true;
                 yBall -= 100;   //faire disparaitre la balle lors de la victoire
                 Toast.makeText(getContext(), "You WIN !!!", Toast.LENGTH_LONG).show();
+                xPlatform = -101;   //réinitialisation des valeurs;
+                yPlatform = -101;
+                reboundsRest = 100;
+                level++;
+                setConfigLevel(level);
+                pause = true;                       //au changement de niveau met le jeu en pause 1000ms avant de relancer
+                startCounter();
             }
         }
     }
@@ -152,5 +178,40 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private void deceleration(float des) {
         if (yVelocity > 0 && yVelocity > normalVelocity) yVelocity -= des;
         if (yVelocity < 0 && yVelocity < -normalVelocity) yVelocity += des;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+        setConfigLevel(level);
+    }
+
+    private void setConfigLevel(int level){
+        xVelocity += (float)level*4.0f;
+        yVelocity += (float)level*4.0f;
+        normalVelocity += (float)level*2.0f;
+        parentActivity.setTitle("LEVEL "+level);    //titre LEVEL X pendant le jeu
+    }
+
+    public void setParentActivity(FragmentActivity activity) {
+        parentActivity = activity;
+    }
+
+    private void startCounter(){
+        h.post(new Runnable() {public void run() {
+            parentActivity.setTitle("3");
+            h.postDelayed(new Runnable() {public void run() {
+                parentActivity.setTitle("2");
+                h.postDelayed(new Runnable() {public void run() {
+                    parentActivity.setTitle("1");
+                    h.postDelayed(new Runnable() {public void run() {
+                        parentActivity.setTitle("GO!!!");
+                        h.post(p);
+                        h.postDelayed(new Runnable() {public void run() {
+                            parentActivity.setTitle(getContext().getString(R.string.app_name));
+                        }}, 1000);
+                    }}, 500);
+                }}, 500);
+            }}, 500);
+        }});
     }
 }

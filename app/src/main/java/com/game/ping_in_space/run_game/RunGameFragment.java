@@ -20,6 +20,11 @@ public class RunGameFragment extends Fragment {
     private AnimatedView animatedView;
     private ProgressBar progressBar = null;
     private int reboundsRest = 100;
+    private int level;
+
+    public RunGameFragment(int level) {
+        this.level = level;
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +33,8 @@ public class RunGameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.run_game_layout, container,false);
         animatedView = view.findViewById(R.id.anim_view);
+        animatedView.setParentActivity(getActivity());  //appeller d'abord setParentActivity
+        animatedView.setLevel(level);                   //et ensuite setLevel
         return view;
     }
 
