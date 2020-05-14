@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,10 +27,8 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
     private FragmentManager fm = null;
     private FragmentTransaction ft = null;
     private RunGameFragment runGameFragment = null;
-    private RecyclerView recyclerViewLevel = null;
     private LevelsAdapter levelsAdapter = null;
-    TextView textView = null;
-    int level = 1;
+    private int level = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +40,7 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_layout, container,false);
         buttonStart = view.findViewById(R.id.buttonStart);
-        recyclerViewLevel = view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerViewLevel = view.findViewById(R.id.recyclerView);
         recyclerViewLevel.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewLevel.setAdapter(levelsAdapter);
         return view;
@@ -68,7 +65,7 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
     @Override
     public void recyclerViewListClicked(View oldView, View v, int position) {
         level = position+1;
-        textView = oldView.findViewById(R.id.textViewCell);
+        TextView textView = oldView.findViewById(R.id.textViewCell);
         textView.setTextColor(getResources().getColor(R.color.yellow));
         textView = v.findViewById(R.id.textViewCell);
         textView.setTextColor(getResources().getColor(R.color.white));
