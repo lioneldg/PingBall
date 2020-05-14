@@ -31,17 +31,13 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
     private LevelsAdapter levelsAdapter = null;
     private int level = 1;
     private MediaPlayer mediaPlayer = null;
-    MediaPlayer playFire = null;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       // mediaPlayer = MediaPlayer.create(getContext(), R.raw.bg_music);
-        //mediaPlayer.start();
-        playFire = MediaPlayer.create(getContext(), R.raw.fire);
-        playFire.start();
-
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.bg_music);
+        mediaPlayer.start();
 
         fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         levelsAdapter = new LevelsAdapter(getContext(),this);
