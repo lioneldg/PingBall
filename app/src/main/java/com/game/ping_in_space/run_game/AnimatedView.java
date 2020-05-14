@@ -7,10 +7,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.Toast;
-
 import androidx.fragment.app.FragmentActivity;
-
 import com.game.ping_in_space.R;
+
+//1) a faire lorsque loose recupere le fragmentHome et l'afficher en le passant à show et runGameFragment à hide
+//exemple à prendre dans homeFragment
+//2) entre deux niveaux faire un écran noir de décompte avec un gros chiffre au milieu
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private int xBall = -101;
@@ -107,7 +109,6 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         if (((yBall + heightBall > yPlatform) && (yBall < yPlatform + heightPlatform)) && ((xBall + widthBall / 2.0f > xPlatform) && (xBall + widthBall / 2.0f < xPlatform + widthPlatform))) {
             if (!blockedX && !blockedY) {
                 yVelocity *= - 1;   //la vitesse de la platforme est proportionnellement appliquée à la balle
-
                 blockedY = true;
             }
             acceleration();
@@ -131,7 +132,9 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             yVelocity *= -0.9f; //la balle rebondit au plafond et ralenti un peu sur Y
             blockedTop = true;
             int decrReboundRest = 10;
-            if(reboundsRest > 0) reboundsRest -= decrReboundRest;
+            if(reboundsRest > 0){
+                reboundsRest -= decrReboundRest;
+            }
             if(reboundsRest<=0){
                 //endGame = true;
                 yBall -= 100;   //faire disparaitre la balle lors de la victoire
