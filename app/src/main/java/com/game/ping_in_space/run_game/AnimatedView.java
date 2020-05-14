@@ -81,7 +81,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             heightScreen = this.getHeight();
 
         } else if (yBall > heightScreen) {      //si la balle sort en bas de l'écran you loose!!!
-            Toast.makeText(getContext(), "You LOOSE !!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.You_LOOSE, Toast.LENGTH_LONG).show();
             endGame = true;   //va permettre de sortir de la boucle de onDraw <=> h.postDelayed
             parentActivity.setTitle(getContext().getString(R.string.app_name)); //titre nom de l'application en cas de perte
         } else {
@@ -135,7 +135,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             if(reboundsRest<=0){
                 //endGame = true;
                 yBall -= 100;   //faire disparaitre la balle lors de la victoire
-                Toast.makeText(getContext(), "You WIN !!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.You_WIN, Toast.LENGTH_LONG).show();
                 xPlatform = -101;   //réinitialisation des valeurs;
                 yPlatform = -101;
                 reboundsRest = 100;
@@ -188,7 +188,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         xVelocity += (float)level*4.0f;
         yVelocity += (float)level*4.0f;
         normalVelocity += (float)level*2.0f;
-        parentActivity.setTitle("LEVEL "+level);    //titre LEVEL X pendant le jeu
+        parentActivity.setTitle(getContext().getString(R.string.LEVEL)+level);    //titre LEVEL X pendant le jeu
     }
 
     public void setParentActivity(FragmentActivity activity) {
@@ -203,10 +203,10 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
                 h.postDelayed(new Runnable() {public void run() {
                     parentActivity.setTitle("1");
                     h.postDelayed(new Runnable() {public void run() {
-                        parentActivity.setTitle("GO!!!");
+                        parentActivity.setTitle(getContext().getString(R.string.GO));
                         h.post(p);
                         h.postDelayed(new Runnable() {public void run() {
-                            parentActivity.setTitle(getContext().getString(R.string.app_name));
+                            parentActivity.setTitle(getContext().getString(R.string.LEVEL) + getContext().getString(R.string.one_space) + level);
                         }}, 1000);
                     }}, 500);
                 }}, 500);

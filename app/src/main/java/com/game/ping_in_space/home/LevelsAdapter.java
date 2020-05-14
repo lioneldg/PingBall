@@ -30,7 +30,7 @@ class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
     }
 
     public void onBindViewHolder(@NonNull LevelViewHolder holder, int position) {
-        String level = "Level "+(position+1);
+        String level = context.getString(R.string.LEVEL)+context.getString(R.string.one_space)+(position+1);
         holder.display(context, level);
     }
 

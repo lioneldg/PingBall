@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
                 ft = fm.beginTransaction();
                 ft.add(R.id.main_layout, runGameFragment, "tagRunGameFragment");
                 ft.hide(Objects.requireNonNull(fm.findFragmentByTag("tagHomeFragment")));
-                ft.addToBackStack("start");
+                ft.addToBackStack(getString(R.string.START));
                 ft.commit();
             }
         });
@@ -69,6 +69,5 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
         textView.setTextColor(getResources().getColor(R.color.yellow));
         textView = v.findViewById(R.id.textViewCell);
         textView.setTextColor(getResources().getColor(R.color.white));
-        Log.d("LEVEL",""+level);
     }
 }

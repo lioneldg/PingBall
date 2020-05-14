@@ -2,4 +2,11 @@
     <string name="app_name">Ping In Space</string>
     <string name="start">Start</string>
     <string name="textview">TextView</string>
+    <string name="You_LOOSE">You LOOSE !!!</string>
+    <string name="You_WIN">You WIN !!!</string>
+    <string name="LEVEL">LEVEL</string>
+    <string name="START">start</string>
+    <string name="GO">GO!!!</string>
+    <string name="one_space">" "</string>
+
 </resources>
