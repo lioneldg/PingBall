@@ -1,6 +1,5 @@
 package com.game.ping_in_space.run_game;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,9 +20,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private float xVelocity = 20;
     private float yVelocity = 20;
     private float normalVelocity = 60;
-    private float maxVelocity = 300;
     private final Handler h;
-    private final int FRAME_RATE = 30;
     private final Bitmap ballBitmap;
     private final Bitmap platformBitmap;
     private int widthScreen = 0;
@@ -38,7 +35,6 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private boolean blockedX = false;
     private boolean blockedY = false;
     private int reboundsRest = 100;
-    private int decrReboundRest = 10;
     private int level = 1;
     private FragmentActivity parentActivity = null;
     private boolean pause = true;
@@ -93,11 +89,12 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             yBall += yVelocity;
             platformTouched();
             wallTouched();
-            deceleration(20.0f);
+            deceleration();
 
         }
         c.drawBitmap(ballBitmap, xBall, yBall, null);
         c.drawBitmap(platformBitmap, xPlatform, yPlatform, null);
+        int FRAME_RATE = 30;
         if (!endGame && !pause)
             h.postDelayed(r, FRAME_RATE);   //h.postDelayed invalide avec le Runnable ce qui rappelle onDraw
     }
@@ -113,7 +110,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
 
                 blockedY = true;
             }
-            acceleration(180);
+            acceleration();
         }
         if (((yBall + heightBall / 2.0f > yPlatform) && (yBall + heightBall / 2.0f < yPlatform + heightPlatform)) && ((xBall + widthBall > xPlatform) && (xBall < xPlatform + widthPlatform))) {
             if (!blockedX && !blockedY) {
@@ -133,6 +130,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         if (yBall < 0 && !blockedTop) {
             yVelocity *= -0.9f; //la balle rebondit au plafond et ralenti un peu sur Y
             blockedTop = true;
+            int decrReboundRest = 10;
             if(reboundsRest > 0) reboundsRest -= decrReboundRest;
             if(reboundsRest<=0){
                 //endGame = true;
@@ -169,15 +167,16 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         return reboundsRest;
     }
 
-    private void acceleration(float acc) {
+    private void acceleration() {
+        float maxVelocity = 300;
         if (yVelocity > -maxVelocity && yVelocity < maxVelocity) {
-            yVelocity += (yVelocity > 0) ? acc : -acc;
+            yVelocity += (yVelocity > 0) ? 180.0f : -180.0f;
         }
     }
 
-    private void deceleration(float des) {
-        if (yVelocity > 0 && yVelocity > normalVelocity) yVelocity -= des;
-        if (yVelocity < 0 && yVelocity < -normalVelocity) yVelocity += des;
+    private void deceleration() {
+        if (yVelocity > 0 && yVelocity > normalVelocity) yVelocity -= 20.0f;
+        if (yVelocity < 0 && yVelocity < -normalVelocity) yVelocity += 20.0f;
     }
 
     public void setLevel(int level) {

@@ -20,7 +20,7 @@ public class RunGameFragment extends Fragment {
     private AnimatedView animatedView;
     private ProgressBar progressBar = null;
     private int reboundsRest = 100;
-    private int level;
+    private final int level;
 
     public RunGameFragment(int level) {
         this.level = level;
