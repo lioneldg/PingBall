@@ -37,7 +37,7 @@
         android:background="@drawable/btn_rounded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start"
+        android:text="@string/START"
         android:textSize="20sp"
         android:paddingHorizontal="30sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         HomeFragment homeFragment = new HomeFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.main_layout, homeFragment, "tagHomeFragment");
+        ft.add(R.id.main_layout, homeFragment, getResources().getString(R.string.tagHomeFragment));
         ft.commit();
     }
 }

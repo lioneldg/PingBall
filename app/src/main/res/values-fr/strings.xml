@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="You_LOOSE">Perdu !!!</string>
+    <string name="You_WIN">Gagné !!!</string>
+    <string name="LEVEL">NIVEAU</string>
+    <string name="START">Démarrer</string>
+    <string name="tagRunGameFragment">tagRunGameFragment</string>
+    <string name="tagHomeFragment">tagHomeFragment</string>
+</resources>

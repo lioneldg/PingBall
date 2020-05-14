@@ -2,7 +2,6 @@ package com.game.ping_in_space.home;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +52,8 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
             public void onClick(View v) {
                 runGameFragment = new RunGameFragment(level);
                 ft = fm.beginTransaction();
-                ft.add(R.id.main_layout, runGameFragment, "tagRunGameFragment");
-                ft.hide(Objects.requireNonNull(fm.findFragmentByTag("tagHomeFragment")));
+                ft.add(R.id.main_layout, runGameFragment, getString(R.string.tagRunGameFragment));
+                ft.hide(Objects.requireNonNull(fm.findFragmentByTag(getString(R.string.tagHomeFragment))));
                 ft.addToBackStack(getString(R.string.START));
                 ft.commit();
             }
