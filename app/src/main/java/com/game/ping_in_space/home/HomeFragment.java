@@ -1,9 +1,7 @@
 package com.game.ping_in_space.home;
 
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,20 +28,10 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
     private RunGameFragment runGameFragment = null;
     private LevelsAdapter levelsAdapter = null;
     private int level = 1;
-    private MediaPlayer mediaPlayer = null;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Handler handler = new Handler();    //lancement de la musique de fond
-        handler.post(new Runnable() {
-            public void run() {
-                mediaPlayer = MediaPlayer.create(getContext(), R.raw.bg_music);
-                mediaPlayer.setLooping(true);
-                mediaPlayer.start();
-            }
-        });
 
 
         fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
