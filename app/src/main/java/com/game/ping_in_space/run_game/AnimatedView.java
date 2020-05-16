@@ -17,7 +17,7 @@ import com.game.ping_in_space.R;
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private int xBall = -101;
-    private int yBall = -101;
+    private int yBall = -1000;
     private float xPlatform = -1;
     private float yPlatform = -1;
     private float xVelocity = 20;
@@ -33,6 +33,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private final int widthPlatform;
     private final int heightPlatform;
     private boolean endGame = false;
+    private boolean startInit = true;
     private boolean blockedSide = false;
     private boolean blockedTop = false;
     private boolean blockedX = false;
@@ -47,7 +48,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     @SuppressLint("ClickableViewAccessibility")
     public AnimatedView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        h = new Handler();              //ce handler va être utilisé pour lancer des threads décalés et immédiats
+        h = new Handler();              //ce handler va être utilisé pour lancer des threads décalés ou immédiats
         BitmapDrawable ball = (BitmapDrawable) context.getResources().getDrawable(R.drawable.earth45);  //récupération de la balle
         ballBitmap = ball.getBitmap();
         widthBall = ball.getBitmap().getWidth();
@@ -70,19 +71,22 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     protected void onDraw(Canvas c) {
-
-        if (yBall < -100) {           //on démarre au centre, initialisation de la taille d'écran, et de la position de la plateforme
+        if (yBall < -999) {           //on démarre au centre, initialisation de la taille d'écran, et de la position de la plateforme
             startCounter();           //démarre le décompte et passe à pause = false
             xBall = this.getWidth() / 2;
             yBall = 10;
-            xPlatform = (float) this.getWidth() / 2 - (float) widthPlatform / 2;
-            yPlatform = this.getHeight() * 0.75f;
+            if(startInit){            //placement de la plateforme seulement au lancement de l'application
+                xPlatform = (float) this.getWidth() / 2 - (float) widthPlatform / 2;
+                yPlatform = this.getHeight() * 0.75f;
+                startInit = false;
+            }
+
             widthScreen = this.getWidth();
             heightScreen = this.getHeight();
 
-        } else if (yBall > heightScreen) {      //si la balle sort en bas de l'écran you loose!!!
+        } else if (yBall > heightScreen && !endGame) {      //si la balle sort en bas de l'écran you loose!!!
             loose();
-        } else {                                //si non on déplace la balle
+        } else if(!pause){                      //la balle se déplace
             xBall += xVelocity;
             yBall += yVelocity;
             platformTouched();                  //teste si la plateforme est touchée
@@ -91,7 +95,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         }
         c.drawBitmap(ballBitmap, xBall, yBall, null);
         c.drawBitmap(platformBitmap, xPlatform, yPlatform, null);
-        if (!endGame && !pause)
+        if (!endGame)
             h.postDelayed(new Runnable() {public void run() { invalidate(); }}, 30);   //invalidate() rappelle onDraw, ca crée une boucle avec un framerate de 30ms
     }
 
@@ -130,7 +134,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
                 progressBar.setProgress(reboundsRest);
             }
             if(reboundsRest<=0){
-                yBall -= 100;           //faire disparaitre la balle lors de la victoire
+                yBall = -1000;           //faire disparaitre la balle lors de la victoire
                 Toast.makeText(getContext(), R.string.You_WIN, Toast.LENGTH_LONG).show();
 
                 reboundsRest = 100;
@@ -161,9 +165,8 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void setConfigLevel(int level){
-        xVelocity += (float)level*4.0f;
-        yVelocity += (float)level*4.0f;
-        normalVelocity += (float)level*2.0f;
+        xVelocity = 20 + (float)level*4.0f;
+        yVelocity = 20 + (float)level*4.0f;
         parentActivity.setTitle(getContext().getString(R.string.LEVEL)+level);    //titre LEVEL X pendant le jeu
     }
 
@@ -207,8 +210,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         xVelocity = 20;
         yVelocity = 20;
         normalVelocity = 60;
-        xBall = -101;
-        yBall = -101;
+        yBall = -1000;
         endGame = false;
         reboundsRest = 100;
         progressBar.setProgress(reboundsRest);

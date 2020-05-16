@@ -12,7 +12,7 @@ import android.os.Handler;
 
 public class MainActivity extends AppCompatActivity {
 //1) entre deux niveaux faire un écran noir de décompte avec un gros chiffre au milieu
-//2) gestion du cycle de vie
+//2) faire le apropos
 
     private MediaPlayer mediaPlayer = null;
     private int playerCurrentPosition = 0;

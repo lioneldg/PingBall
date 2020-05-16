@@ -13,6 +13,7 @@
         android:text="@string/textview"
         android:textColor="@color/yellow"
         android:textSize="30sp"
+        android:typeface="serif"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
