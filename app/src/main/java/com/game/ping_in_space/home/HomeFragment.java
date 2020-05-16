@@ -51,11 +51,11 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
             public void onClick(View v) {
                 runGameFragment = (RunGameFragment) fm.findFragmentByTag(getString(R.string.tagRunGameFragment));
                 assert runGameFragment != null;
-                runGameFragment.setLevel(level);
+                runGameFragment.setLevel(level);   //transmet le niveau choisis lors du click sur start
                 ft = fm.beginTransaction();
                 ft.show(runGameFragment);
                 ft.hide(Objects.requireNonNull(fm.findFragmentByTag(getString(R.string.tagHomeFragment))));
-                ft.addToBackStack(getString(R.string.START));
+                ft.addToBackStack(getString(R.string.START));       //autorise le retour en arrière
                 ft.commit();
             }
         });
@@ -63,11 +63,12 @@ public class HomeFragment extends Fragment implements LevelsAdapter.RecyclerView
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void recyclerViewListClicked(View oldView, View v, int position) {
-        level = position+1;
+    public void recyclerViewListClicked(View oldView, View v, int position) {   //interface implementée permet de recevoir
+                                                                                // des infos de la RecyclerView dans LevelAdapter
+        level = position+1;     //paramètre la variable level
         TextView textView = oldView.findViewById(R.id.textViewCell);
-        textView.setTextColor(getResources().getColor(R.color.yellow));
+        textView.setTextColor(getResources().getColor(R.color.yellow));         //paint en jaune l'ancien l'item qui n'est plus sélectionné
         textView = v.findViewById(R.id.textViewCell);
-        textView.setTextColor(getResources().getColor(R.color.white));
+        textView.setTextColor(getResources().getColor(R.color.white));          //paint en jaune l'item sélectionné
     }
 }

@@ -17,10 +17,12 @@ class LevelViewHolder extends RecyclerView.ViewHolder{
         super(itemView);
         textViewCell = itemView.findViewById(R.id.textViewCell);
         itemView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            public void onClick(View v) {   //transmition des informations de l'item cliqué à LevelAdapter
                 LevelsAdapter.levelChoosed =true;
-                LevelsAdapter.itemListener.recyclerViewListClicked(levelsAdapter.oldView, v, getAdapterPosition());
-                levelsAdapter.oldView = v;
+                LevelsAdapter.itemListener.recyclerViewListClicked(levelsAdapter.oldView, v, getAdapterPosition()); //appel de la méthode de l'interface
+                                                                                                                    //recyclerViewListClicked pour transmettre les informations
+                                                                                                                    //à HomeFragment
+                levelsAdapter.oldView = v;  //oldView devient la nouvelle vue
             }
         });
     }
@@ -29,11 +31,11 @@ class LevelViewHolder extends RecyclerView.ViewHolder{
         textViewCell.setText(cellLevel);
         if(getAdapterPosition() == 0 && !LevelsAdapter.levelChoosed){
             levelsAdapter.oldView = textViewCell;                     //au lancement oldView est LEVEL1
-            textViewCell.setTextColor(context.getResources().getColor(R.color.white));
+            textViewCell.setTextColor(context.getResources().getColor(R.color.white));  // grace aux contexte passé par LevelAdapter on peut accéder aux resources
         }
     }
 
     void setLevelsAdapter(LevelsAdapter levelsAdapter){
-        this.levelsAdapter =levelsAdapter;
+        this.levelsAdapter = levelsAdapter;
     }
 }

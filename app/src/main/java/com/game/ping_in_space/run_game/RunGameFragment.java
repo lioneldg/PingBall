@@ -1,25 +1,17 @@
 package com.game.ping_in_space.run_game;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.game.ping_in_space.R;
 
 
 public class RunGameFragment extends Fragment {
 
     private AnimatedView animatedView;
-    private ProgressBar progressBar = null;
-    private int reboundsRest = 100;
 
     public RunGameFragment() { }
 
@@ -29,32 +21,14 @@ public class RunGameFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.run_game_layout, container,false);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
         animatedView = view.findViewById(R.id.anim_view);
-        animatedView.setParentActivity(getActivity());
+        animatedView.setParentActivity(getActivity());      //transmet l'activité à AnimatedView pour l'acces au FragmentManager
+        animatedView.setProgressBar(progressBar);           //transmet la ProgressBar à AnimatedView
         return view;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        progressBar = view.findViewById(R.id.progressBar);
-        progressBar.setProgress(reboundsRest);
-        animatedView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(final View v, final MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_MOVE) {
-                    animatedView.setXPlatform(event.getX() - animatedView.getWidthPlatform() / 2.0f);
-                    animatedView.setYPlatform(event.getY() - animatedView.getHeightScreen()/6.0f);
-                    if(reboundsRest != animatedView.getReboundsRest()){
-                        reboundsRest = animatedView.getReboundsRest();
-                        progressBar.setProgress(reboundsRest);
-                    }
-                }
-                return true;
-            }
-        });
-    }
-
-    public void setLevel(int level) {
+    public void setLevel(int level) {      //appelé automatiquement par  buttonStart.setOnClickListener dans HomeFragment
         animatedView.setLevel(level);
     }
 }
