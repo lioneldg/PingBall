@@ -8,11 +8,8 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import com.game.ping_in_space.R;
-
-//1) a faire lorsque loose recupere le fragmentHome et l'afficher en le passant à show et runGameFragment à hide
-//exemple à prendre dans homeFragment
-//2) entre deux niveaux faire un écran noir de décompte avec un gros chiffre au milieu
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private int xBall = -101;
@@ -40,11 +37,11 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private int level = 1;
     private FragmentActivity parentActivity = null;
     private boolean pause = true;
+    private FragmentManager fm = null;
 
     public AnimatedView(Context context, AttributeSet attrs) {
         super(context, attrs);
         h = new Handler();
-
         BitmapDrawable ball = (BitmapDrawable) context.getResources().getDrawable(R.drawable.earth45);
         ballBitmap = ball.getBitmap();
         widthBall = ball.getBitmap().getWidth();
@@ -83,9 +80,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             heightScreen = this.getHeight();
 
         } else if (yBall > heightScreen) {      //si la balle sort en bas de l'écran you loose!!!
-            Toast.makeText(getContext(), R.string.You_LOOSE, Toast.LENGTH_LONG).show();
-            endGame = true;   //va permettre de sortir de la boucle de onDraw <=> h.postDelayed
-            parentActivity.setTitle(getContext().getString(R.string.app_name)); //titre nom de l'application en cas de perte
+            loose();
         } else {
             xBall += xVelocity;
             yBall += yVelocity;
@@ -136,7 +131,6 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
                 reboundsRest -= decrReboundRest;
             }
             if(reboundsRest<=0){
-                //endGame = true;
                 yBall -= 100;   //faire disparaitre la balle lors de la victoire
                 Toast.makeText(getContext(), R.string.You_WIN, Toast.LENGTH_LONG).show();
                 xPlatform = -101;   //réinitialisation des valeurs;
@@ -184,6 +178,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setLevel(int level) {
         this.level = level;
+        varsInit();
         setConfigLevel(level);
     }
 
@@ -196,6 +191,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setParentActivity(FragmentActivity activity) {
         parentActivity = activity;
+        fm = parentActivity.getSupportFragmentManager();
     }
 
     private void startCounter(){
@@ -215,5 +211,23 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
                 }}, 500);
             }}, 500);
         }});
+    }
+
+    void loose(){
+        Toast.makeText(getContext(), R.string.You_LOOSE, Toast.LENGTH_LONG).show();
+        endGame = true;   //va permettre de sortir de la boucle de onDraw <=> h.postDelayed
+        parentActivity.setTitle(getContext().getString(R.string.app_name)); //titre nom de l'application en cas de perte
+        fm.popBackStack();
+    }
+
+    void varsInit(){
+        xVelocity = 20;
+        yVelocity = 20;
+        normalVelocity = 60;
+        xBall = -101;
+        yBall = -101;
+        endGame = false;
+        reboundsRest = 100;
+        pause = true;
     }
 }
