@@ -6,4 +6,7 @@
     <string name="START">Démarrer</string>
     <string name="tagRunGameFragment">tagRunGameFragment</string>
     <string name="tagHomeFragment">tagHomeFragment</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
 </resources>

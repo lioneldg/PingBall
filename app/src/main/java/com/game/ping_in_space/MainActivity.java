@@ -11,7 +11,7 @@ import android.os.Handler;
 
 
 public class MainActivity extends AppCompatActivity {
-//1) entre deux niveaux faire un écran noir de décompte avec un gros chiffre au milieu
+//1) entre deux niveaux faire un écran noir de décompte avec un gros chiffre au milieu NIVEAU X, 3, 2, 1, GO!!!
 //2) faire le apropos
 
     private MediaPlayer mediaPlayer = null;

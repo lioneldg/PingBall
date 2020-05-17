@@ -9,20 +9,22 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import com.game.ping_in_space.R;
 
 public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
-    private int xBall = -101;
-    private int yBall = -1000;
-    private float xPlatform = -1;
-    private float yPlatform = -1;
-    private float xVelocity = 20;
-    private float yVelocity = 20;
-    private float normalVelocity = 60;
+    private int xBall = 0;
+    private int yBall = 0;
+    private float xPlatform = 0;
+    private float yPlatform = 0;
+    private float xVelocity = 0;
+    private float yVelocity = 0;
+    private float normalVelocity = 0;
     private final Handler h;
     private final Bitmap ballBitmap;
     private final Bitmap platformBitmap;
@@ -38,8 +40,8 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     private boolean blockedTop = false;
     private boolean blockedX = false;
     private boolean blockedY = false;
-    private int reboundsRest = 100;
-    private int level = 1;
+    private int reboundsRest = 0;
+    private int level = 0;
     private FragmentActivity parentActivity = null;
     private boolean pause = true;
     private FragmentManager fm = null;
@@ -74,7 +76,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
         if (yBall < -999) {           //on démarre au centre, initialisation de la taille d'écran, et de la position de la plateforme
             startCounter();           //démarre le décompte et passe à pause = false
             xBall = this.getWidth() / 2;
-            yBall = 10;
+            yBall = this.getHeight()/10;
             if(startInit){            //placement de la plateforme seulement au lancement de l'application
                 xPlatform = (float) this.getWidth() / 2 - (float) widthPlatform / 2;
                 yPlatform = this.getHeight() * 0.75f;
@@ -86,7 +88,7 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
 
         } else if (yBall > heightScreen && !endGame) {      //si la balle sort en bas de l'écran you loose!!!
             loose();
-        } else if(!pause){                      //la balle se déplace
+        } else if(!pause && !endGame){                      //la balle se déplace
             xBall += xVelocity;
             yBall += yVelocity;
             platformTouched();                  //teste si la plateforme est touchée
@@ -127,22 +129,20 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
             blockedSide = true;
         }
         if (yBall < 0 && !blockedTop) {
-            yVelocity *= -0.9f;         //la balle rebondit au plafond et ralenti de 10% sur Y
+            yVelocity *= -1;         //la balle rebondit au plafond
             blockedTop = true;
             if(reboundsRest > 0){
                 reboundsRest -= 10;     //décrémente la ProgressBarr de 10
                 progressBar.setProgress(reboundsRest);
             }
             if(reboundsRest<=0){
+                transitionAnimation(getContext().getString(R.string.You_WIN), 2000, true, false);
                 yBall = -1000;           //faire disparaitre la balle lors de la victoire
-                Toast.makeText(getContext(), R.string.You_WIN, Toast.LENGTH_LONG).show();
-
                 reboundsRest = 100;
                 progressBar.setProgress(reboundsRest);
                 level++;
                 setConfigLevel(level);  //prépare les variable au changement automatique de niveau après la victoire
                 pause = true;           //au changement de niveau met le jeu en pause 1000ms avant de relancer
-                startCounter();
             }
         }
     }
@@ -154,8 +154,8 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void deceleration() {       //desceleration de la balle en cas de trop grande vitesse
-        if (yVelocity > 0 && yVelocity > normalVelocity) yVelocity -= 20.0f;
-        if (yVelocity < 0 && yVelocity < -normalVelocity) yVelocity += 20.0f;
+        if (yVelocity > 0 && yVelocity > normalVelocity) yVelocity -= 18.0f;
+        if (yVelocity < 0 && yVelocity < -normalVelocity) yVelocity += 18.0f;
     }
 
     public void setLevel(int level) {   //methode appelée par HomeFragment via RunGameFragment après avoir appuyé sur start
@@ -165,9 +165,9 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void setConfigLevel(int level){
-        xVelocity = 20 + (float)level*4.0f;
-        yVelocity = 20 + (float)level*4.0f;
-        parentActivity.setTitle(getContext().getString(R.string.LEVEL)+level);    //titre LEVEL X pendant le jeu
+        xVelocity = 15 + (float)level*4.0f;
+        yVelocity = 15 + (float)level*4.0f;
+        normalVelocity = 30 + (float)level*4.0f;
     }
 
     public void setParentActivity(FragmentActivity activity) {
@@ -177,39 +177,34 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
 
     private void startCounter(){
         h.post(new Runnable() {public void run() {
-            parentActivity.setTitle("3");
+            transitionAnimation(getContext().getString(R.string.LEVEL)+getContext().getString(R.string.one_space)+level, 1000, true, false);
             h.postDelayed(new Runnable() {public void run() {
-                parentActivity.setTitle("2");
+                transitionAnimation(getContext().getString(R.string.three), 500, false, true);
                 h.postDelayed(new Runnable() {public void run() {
-                    parentActivity.setTitle("1");
+                    transitionAnimation(getContext().getString(R.string.two), 500, false, true);
                     h.postDelayed(new Runnable() {public void run() {
-                        parentActivity.setTitle(getContext().getString(R.string.GO));
-                        h.post(new Runnable() {
-                            public void run() {
-                                pause = false;
-                                invalidate();
-                            }
-                        });
+                        transitionAnimation(getContext().getString(R.string.one), 500, false, true);
                         h.postDelayed(new Runnable() {public void run() {
-                            parentActivity.setTitle(getContext().getString(R.string.LEVEL) + getContext().getString(R.string.one_space) + level);
-                        }}, 1000);
+                            transitionAnimation(getContext().getString(R.string.GO), 500, true, true);
+                            h.postDelayed(new Runnable() {
+                                public void run() {
+                                    pause = false;
+                                    invalidate();
+                                }
+                            },500);
+                        }}, 500);
                     }}, 500);
                 }}, 500);
-            }}, 500);
+            }}, 1500);
         }});
     }
 
     private void loose(){
-        Toast.makeText(getContext(), R.string.You_LOOSE, Toast.LENGTH_LONG).show();
-        endGame = true;                             //va permettre de sortir de la boucle de onDraw <=> h.postDelayed
-        parentActivity.setTitle(getContext().getString(R.string.app_name));   //titre nom de l'application en cas de perte
-        fm.popBackStack();
+        transitionAnimation(getContext().getString(R.string.You_LOOSE),2000,true,true);
+        endGame = true;         //va permettre de sortir de la boucle de onDraw <=> h.postDelayed
     }
 
     private void varsInit(){    //prépare les variables suite à l'appui sur le bouton start
-        xVelocity = 20;
-        yVelocity = 20;
-        normalVelocity = 60;
         yBall = -1000;
         endGame = false;
         reboundsRest = 100;
@@ -219,5 +214,26 @@ public class AnimatedView extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setProgressBar(ProgressBar pb){
         this.progressBar = pb;          //récupération de la ProgressBar de RunGameFragment
+    }
+
+    private void transitionAnimation(final String message, int duration, boolean fillAfter, final boolean clear){
+        final TextView textView = parentActivity.findViewById(R.id.textTransition);
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.transition_animation);
+        animation.setDuration(duration);
+        animation.setFillAfter(fillAfter);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+                textView.setText(message);
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                if(clear) textView.setText("");
+                if(endGame) fm.popBackStack();
+            }
+
+            public void onAnimationRepeat(Animation animation) { }
+        });
+
+        textView.startAnimation(animation);
     }
 }
