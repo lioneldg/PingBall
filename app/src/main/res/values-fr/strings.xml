@@ -9,4 +9,11 @@
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
+    <string name="about">à propos</string>
+    <string name="OK">OK</string>
+    <string name="text_about">Ping In Space est l\'ébauche d\'un jeu qui a été développé pour soutenir ma recherche d\'emploi en alternance en tant que développeur d\'applications mobiles Android.\n\n\nN\'hésitez pas à me contacter!</string>
+    <string name="lioneldegans_gmail_com">lioneldegans@gmail.com</string>
+    <string name="_06_68_64_02_36">06.68.64.02.36</string>
+    <string name="Uri_mail">mailto:lioneldegans@gmail.com</string>
+    <string name="Uri_tel">tel:0668640236</string>
 </resources>

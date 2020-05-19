@@ -12,5 +12,12 @@
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
+    <string name="about">about</string>
+    <string name="OK">OK</string>
+    <string name="text_about">Ping In Space is the draft of a game that was developed to support my job search in sandwich courses as a developer of Android mobile applications.\n\n\nDo not hesitate to contact me!</string>
+    <string name="lioneldegans_gmail_com">lioneldegans@gmail.com</string>
+    <string name="_06_68_64_02_36">06.68.64.02.36</string>
+    <string name="Uri_mail">mailto:lioneldegans@gmail.com</string>
+    <string name="Uri_tel">tel:0668640236</string>
 
 </resources>
